@@ -20,12 +20,13 @@ export const Header = () => {
             Menu
           </Button>
           {isMenuOpen && (
-            <div className="absolute top-full left-0 bg-white shadow-md rounded-md py-2 z-10">
-              <Link href="#" className="block px-4 py-2 hover:bg-gray-100">Log in</Link>
+            <div className="absolute top-full left-0 bg-white shadow-md rounded-md py-2 z-10 whitespace-nowrap">
               <Link href="/providers" className="block px-4 py-2 hover:bg-gray-100">Providers</Link>
               <Link href="#" className="block px-4 py-2 hover:bg-gray-100">Services</Link>
-              <Link href="#" className="block px-4 py-2 hover:bg-gray-100 md:hidden font-inter font-light">Contact Us</Link>
-              <Link href="#" className="block px-4 py-2 hover:bg-gray-100 md:hidden">About Us</Link>
+              <Link href="#" className="block px-4 py-2 hover:bg-gray-100">Contact Us</Link>
+              <Link href="#" className="block px-4 py-2 hover:bg-gray-100">About Us</Link>
+              <Link href="#" className="block px-4 py-2 hover:bg-gray-100 md:hidden">Log in</Link>
+
             </div>
           )}
         </div>
@@ -33,7 +34,6 @@ export const Header = () => {
           <Image alt="logo" src={logo} width={120} height={120} />
         </div>
         <div className="hidden md:flex space-x-4">
-          <Link href="#" className="text-white hover:text-gray-200">Contact Us</Link>
           <Link href="authentication/login" className="font-semibold text-white hover:text-[#6D32CF]">
                Log in <span aria-hidden="true">&rarr;</span>
               </Link>
