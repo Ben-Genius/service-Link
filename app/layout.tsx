@@ -1,18 +1,17 @@
 import type { Metadata } from "next";
-import { Inter, Poppins } from "next/font/google"
+import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
-import { Header } from "./screens/header";
+import { Header } from "./homeScreens/header";
+import { Footer } from "./homeScreens/footer";
 
-const inter = Inter({ 
+const inter = Inter({
   subsets: ["latin"],
-  weight: ["200","300","400", "500", "600", "700", "800", "900"],
+  weight: ["200", "300", "400", "500", "600", "700", "800", "900"],
   variable: "--font-inter",
   display: "swap",
-
-
 });
 const poppings = Poppins({
-  weight: ["300","400", "500", "600", "700", "800", "900"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
   subsets: ["latin"],
   variable: "--font-poppins",
 });
@@ -29,11 +28,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${inter.variable} ${poppings.variable} antialiased `}
-      >
-        <Header/>
+      <body className={`${inter.variable} ${poppings.variable} antialiased `}>
+        <Header />
         {children}
+        <Footer/>
       </body>
     </html>
   );

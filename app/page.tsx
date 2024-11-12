@@ -1,12 +1,11 @@
 // src/app/page.tsx
 "use client";
 
-import { Footer } from "./screens/footer";
-import { Header } from "./screens/header";
-import { HeroSection } from "./screens/hero";
-import HowItWorks from "./screens/howItWorks";
-import { Testimonials } from "./screens/testimonial";
-import {ServiceCategories} from "./screens/serviceCategories";
+import { Header } from "./homeScreens/header";
+import { HeroSection } from "./homeScreens/hero";
+import HowItWorks from "./homeScreens/howItWorks";
+import { Testimonials } from "./homeScreens/testimonial";
+import { ServiceCategories } from "./homeScreens/serviceCategories";
 export default function HomePage() {
   return (
     <div className="min-h-screen flex flex-col">
@@ -14,7 +13,7 @@ export default function HomePage() {
       <ServiceCategories />
       <Testimonials />
       <HowItWorks />
-      <Footer />
-    </div> 
+    
+    </div>
   );
 }
