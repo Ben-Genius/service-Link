@@ -34,7 +34,12 @@ export const Header = () => {
         </div>
         <div className="hidden md:flex space-x-4">
           <Link href="#" className="text-white hover:text-gray-200">Contact Us</Link>
-          <Link href="#" className="text-white hover:text-gray-200">About Us</Link>
+          <Link href="authentication/login" className="font-semibold text-white hover:text-[#6D32CF]">
+               Log in <span aria-hidden="true">&rarr;</span>
+              </Link>
+              <Link href="authentication/signup" className=" text-white bg-[#6D32CF] px-2 rounded-md hover:font-bold transition-all duration-300">
+              Sign up
+              </Link>
         </div>
       </div>
     </header>

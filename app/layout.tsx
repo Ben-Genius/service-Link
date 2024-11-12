@@ -19,7 +19,7 @@ const poppings = Poppins({
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isLoginPage = pathname === "/authentication/login" || "/authentication/signup";
+  const isLoginPage = pathname === "/authentication/login" || pathname === "/authentication/signup";
   return (
     <html lang="en">
       <body className={`${inter.variable} ${poppings.variable} antialiased `}>
