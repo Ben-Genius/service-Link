@@ -7,16 +7,20 @@ import Image from "next/image";
 import { Menu } from "lucide-react";
 import { Button } from "../component/ui/button";
 import logo from "../assets/logo.png";
+import logo2 from "../assets/Logoo.png";
+import { usePathname } from "next/navigation";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const isBooking = pathname === "/booking";
 
   return (
     <header className="absolute top-0 left-0 w-full z-30 bg-transparent font-[family-name:var(--font-inter)] font-light">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <div className="relative">
-          <Button variant="ghost" onClick={() => setIsMenuOpen(!isMenuOpen)} className="flex items-center text-white">
-            <Menu className="h-6 w-6 mr-2" />
+          <Button variant="ghost" onClick={() => setIsMenuOpen(!isMenuOpen)} className={`flex items-center text-white ${isBooking && 'text-black'}`}>
+            <Menu className={`h-6 w-6 mr-2 font-semibold ${isBooking && 'text-black'}`} />
             Menu
           </Button>
           {isMenuOpen && (
@@ -30,16 +34,17 @@ export const Header = () => {
             </div>
           )}
         </div>
-        <div className="text-2xl font-bold text-white">
-          <Image alt="logo" src={logo} width={120} height={120} />
+        <div className="text-2xl font-bold text-black">
+          <Image alt="logo" src={isBooking ? logo2 : logo} width={isBooking ? 100 : 120} height={120} className="object-contain" />
         </div>
         <div className="hidden md:flex space-x-4">
-          <Link href="authentication/login" className="font-semibold text-white hover:text-[#6D32CF]">
-               Log in <span aria-hidden="true">&rarr;</span>
-              </Link>
-              <Link href="authentication/signup" className=" text-white bg-[#6D32CF] px-2 rounded-md hover:font-bold transition-all duration-300">
+        <Link href="authentication/signup" className=" text-white bg-[#6D32CF] px-2 rounded-md hover:font-bold transition-all duration-300">
               Sign up
               </Link>
+          <Link href="authentication/login" className={`font-semibold ${isBooking ? 'text-black' : 'text-white'} hover:text-[#6D32CF]`}>
+               Log in <span aria-hidden="true">&rarr;</span>
+              </Link>
+           
         </div>
       </div>
     </header>
