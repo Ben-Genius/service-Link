@@ -12,16 +12,22 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null); 
+  const [success, setSuccess] = useState<string | null>(null); // New state for success message
   const router = useRouter(); // Initialize the router
+  const [loading, setLoading] = useState(false); // New state for loading
+
 
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Form submission initiated");
-
+    
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
+  
     try {
       console.log("Sending request to API with data:", { email, password });
-
+  
       const response = await fetch('/api/login', {
         method: 'POST',
         headers: {
@@ -29,40 +35,43 @@ export default function Login() {
         },
         body: JSON.stringify({ email, password }),
       });
-
-      console.log("Response received:", response);
-
+  
       const data = await response.json();
       console.log("Parsed response data:", data);
-
+  
       if (!response.ok) {
         setError(data.error || 'Login failed');
+        setLoading(false); // Stop loading on error
         return;
       }
-
-      // Handle successful login (e.g., store token)
-      console.log("Login successful:", data);
+  
+      // Set success message and display it
+      setSuccess('Login successful! Redirecting...');
       localStorage.setItem("token", data.token);
-
-      // Redirect to homepage or previous page
-      router.back();   // Use this if you want to go back to the previous page
+      console.log("Login successful:", data);
+  
+      // Set loading to false after success message is shown
+      setLoading(false);
+  
+      // Delay navigation to show success message briefly
+      setTimeout(() => {
+        router.back();
+      }, 1000); // Wait 3 seconds before navigating back to allow message to render
     } catch (err) {
       console.error('Error occurred while logging in:', err);
       setError('An error occurred. Please try again.');
+      setLoading(false); // Stop loading on catch
     }
   };
 
   return (
     <div className="flex min-h-screen w-full bg-[#F2F2F2]">
       {/* Left Section */}
-      <div
-        className="hidden lg:flex lg:w-1/2 bg-[#6D32CF] text-white flex-col justify-between p-12"
-        style={{
-          backgroundImage: `url(${login.src || login})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
-      >
+      <div className="hidden lg:flex lg:w-1/2 bg-[#6D32CF] text-white flex-col justify-between p-12" style={{
+        backgroundImage: `url(${login.src || login})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}>
         <div className="flex items-end justify-start h-full py-7">
           <Image src={logo} alt="Servicelink" className="h-8 w-auto" />
         </div>
@@ -75,7 +84,7 @@ export default function Login() {
           </p>
         </div>
       </div>
-
+  
       {/* Right Section */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
         <div className="w-full max-w-md space-y-8">
@@ -95,9 +104,10 @@ export default function Login() {
                   </Link>
                 </p>
               </div>
-
+  
               {error && <p className="text-red-500 mt-4">{error}</p>}
-
+              {success && <p className="text-green-500 mt-4">{success}</p>} {/* Display success message */}
+              
               <div className="mt-10">
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div>
@@ -117,7 +127,7 @@ export default function Login() {
                       />
                     </div>
                   </div>
-
+  
                   <div>
                     <label htmlFor="password" className="block text-sm/6 font-medium text-gray-900">
                       Password
@@ -135,7 +145,7 @@ export default function Login() {
                       />
                     </div>
                   </div>
-
+  
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
                       <input
@@ -148,21 +158,27 @@ export default function Login() {
                         Remember me
                       </label>
                     </div>
-
+  
                     <div className="text-sm/6">
                       <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
                         Forgot password?
                       </a>
                     </div>
                   </div>
-
+  
                   <div>
                     <button
                       type="submit"
+                      disabled={loading}
+                      style={{ color: 'white', backgroundColor: 'indigo', fontWeight: 'bold' }} // Inline styling for testing
+
                       className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-600"
                     >
-                      Sign in
+                      {loading ? 'Loading...' : 'Sign in'}
+                      
                     </button>
+                    
+
                   </div>
                 </form>
               </div>
@@ -172,4 +188,5 @@ export default function Login() {
       </div>
     </div>
   );
+  
 }
