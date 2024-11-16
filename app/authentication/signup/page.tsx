@@ -1,13 +1,14 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState , useEffect } from 'react';
 import Image from 'next/image';
 import logo from '../../assets/logo.png';
 import logo2 from '../../assets/Logoo.png';
 import login from '../../assets/Content.png';
 import { Input } from '@/app/component/ui/input';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
+import { initializeGoogleSignIn, handleGoogleCredentialResponse } from '@/utils/googleSignInUtil';
 
 
 export default function Signup() {
@@ -34,12 +35,30 @@ export default function Signup() {
     });
   };
 
+  useEffect(() => {
+    const cleanup = initializeGoogleSignIn((response) =>
+      handleGoogleCredentialResponse(response, router, setError, setSuccess)
+    );
+    return cleanup;
+  }, [router]);
+
+  
+  const handleGoogleSignIn = () => {
+    if (window.google) {
+      window.google.accounts.id.prompt(); // Show the Google Sign-In prompt
+    } else {
+      console.error('Google Sign-In script not loaded');
+      setError("Google Sign-In is unavailable. Please try again later.");
+    }
+  };
+  
+  
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
     setSuccess(null);
-
+  
     try {
       const response = await fetch('/api/signup', {
         method: 'POST',
@@ -48,29 +67,29 @@ export default function Signup() {
         },
         body: JSON.stringify(formData),
       });
-
+  
       const data = await response.json();
-      console.log("Backend response:", data); // Logs the entire response including token
-
-
+  
       if (!response.ok) {
         setError(data.error || 'Sign-up failed');
         return;
       }
-
-      localStorage.setItem("token", data.token); // Store the token in local storage
-      setSuccess('Sign-up successful! Please check your email to verify your account.');
-
+  
+      setSuccess('Sign-up successful! Redirecting...');
+      localStorage.setItem('token', data.token);
+  
       setTimeout(() => {
-        router.back();  // Navigate back after displaying success message
-      }, 1000); // Adjust delay as needed to display message before navigating back
-
-    } catch (error) {
+        router.back(); // Redirect back to the previous page
+      }, 1000);
+    } catch (err) {
+      console.error('Sign-up error:', err);
       setError('An error occurred. Please try again.');
     } finally {
       setLoading(false);
     }
   };
+  
+  
 
   return (
     <div className="flex min-h-screen w-full bg-[#F2F2F2]">
@@ -189,7 +208,8 @@ export default function Signup() {
                 </div>
 
                 <div className="mt-2 grid grid-cols-1 gap-4 w-full">
-                  <a href="#" className="flex w-full items-center justify-center gap-3 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:ring-transparent">
+                  <a
+                   onClick= {handleGoogleSignIn}className="flex w-full items-center justify-center gap-3 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:ring-transparent">
                     <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5">
                       <path d="M12.0003 4.75C13.7703 4.75 15.3553 5.36002 16.6053 6.54998L20.0303 3.125C17.9502 1.19 15.2353 0 12.0003 0C7.31028 0 3.25527 2.69 1.28027 6.60998L5.27028 9.70498C6.21525 6.86002 8.87028 4.75 12.0003 4.75Z" fill="#EA4335" />
                       <path d="M23.49 12.275C23.49 11.49 23.415 10.73 23.3 10H12V14.51H18.47C18.18 15.99 17.34 17.25 16.08 18.1L19.945 21.1C22.2 19.01 23.49 15.92 23.49 12.275Z" fill="#4285F4" />

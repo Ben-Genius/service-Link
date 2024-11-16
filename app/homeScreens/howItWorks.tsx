@@ -1,8 +1,16 @@
 import React from 'react';
 import { Clock, Phone, Wallet, User } from "lucide-react";
 import { Button } from '../component/ui/button';
+import { useRouter } from "next/navigation";
+
 
 const HowItWorks = () => {
+  const router = useRouter();
+
+  const handleGetStarted = () => {
+    router.push('/listing'); // Use router.push for navigation
+  };
+
   const steps = [
     {
       icon: <User className="w-12 h-12" />,
@@ -58,7 +66,8 @@ const HowItWorks = () => {
           <p className="text-white text-sm mb-6 font-[family-name:var(--font-inter)] font-thin">
             Join our network of trusted providers and reach more customers today!
           </p>
-          <Button variant="secondary" className="rounded-full bg-white text-black hover:bg-gray-100 font-semibold px-10">
+          <Button variant="secondary" className="rounded-full bg-white text-black hover:bg-gray-100 font-semibold px-10"
+            onClick={handleGetStarted}>
             Get Started
           </Button>
         </div>
